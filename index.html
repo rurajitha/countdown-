@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Date Time Countdown</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 50px;
+    }
+    #timer {
+      font-size: 2em;
+      margin-bottom: 20px;
+    }
+    #button{display: inline-block;
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        text-align: center;
+        text-decoration: none;
+        cursor: pointer;
+        border: 2px solid #3498db;
+        border-radius: 5px;
+        color: #3498db;
+        background-color: #fff;
+        transition: background-color 0.3s, color 0.3s;}
+  </style>
+</head>
+<body>
+
+<label for="datetime">Set Date and Time:</label>
+<input type="datetime-local" id="datetime" required>
+<button id="button" onclick="startTimer()">Start Countdown</button>
+
+<div id="timer"></div>
+
+<script>
+  let countdown;
+
+  function startTimer() {
+    const timerDisplay = document.getElementById('timer');
+    const datetimeInput = document.getElementById('datetime').valueAsNumber;
+
+    if (isNaN(datetimeInput)) {
+      alert('Please select a valid date and time.');
+      return;
+    }
+
+    const endTime = datetimeInput;
+
+    function updateTimer() {
+      const currentTime = new Date().getTime();
+      const timeLeft = endTime - currentTime;
+
+      if (timeLeft <= 0) {
+        clearInterval(countdown);
+        timerDisplay.textContent = '00:00:00';
+        alert('Countdown complete!');
+      } else {
+        const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+        const displayDays = days > 0 ? days + 'd ' : '';
+        const displayHours = hours < 10 ? '0' + hours : hours;
+        const displayMinutes = minutes < 10 ? '0' + minutes : minutes;
+        const displaySeconds = seconds < 10 ? '0' + seconds : seconds;
+
+        timerDisplay.textContent = `${displayDays}${displayHours}:${displayMinutes}:${displaySeconds}`;
+      }
+    }
+
+    updateTimer(); // Initial call to display the time immediately
+    countdown = setInterval(updateTimer, 1000); // Update every second
+  }
+</script>
+
+</body>
+</html>
